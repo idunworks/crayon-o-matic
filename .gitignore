@@ -5,3 +5,4 @@ out/
 .DS_Store
 .svelte-kit/
 build/
+packages/crayon-o-matic/LICENSE

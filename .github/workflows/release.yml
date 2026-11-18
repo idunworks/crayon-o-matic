@@ -1,0 +1,31 @@
+# Publishes crayon-o-matic to npm when a version tag is pushed: `git tag v0.1.0 && git push --tags`.
+# The tag must match packages/crayon-o-matic/package.json's version. Needs the NPM_TOKEN secret
+# (an npm automation token). Publishes with provenance, so npm shows it was built here.
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - name: Tag matches the package version
+        run: test "v$(node -p "require('./packages/crayon-o-matic/package.json').version")" = "$GITHUB_REF_NAME"
+      - run: pnpm check
+      - run: pnpm test
+      - run: pnpm --filter crayon-o-matic build
+      - run: pnpm --filter crayon-o-matic smoke
+      - run: npm publish --provenance --access public
+        working-directory: packages/crayon-o-matic
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

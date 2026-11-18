@@ -11,6 +11,11 @@ studio, also embeddable as a Svelte component). The spec is in
 
 ## Try it
 
+As a package ([npm](https://www.npmjs.com/package/crayon-o-matic)): `npm i crayon-o-matic`, then
+`import { draw } from 'crayon-o-matic'`; see [the package README](packages/crayon-o-matic/README.md).
+
+From this repo:
+
 ```bash
 pnpm install
 pnpm crayon "a furious grandma with a cat" --age 4 --seed 11 --out grandma.svg

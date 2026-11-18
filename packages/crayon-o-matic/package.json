@@ -1,0 +1,80 @@
+{
+	"name": "crayon-o-matic",
+	"version": "0.1.0",
+	"description": "Draws any motif the way a 3–6 year old would, as print-friendly vector art. Seeded, science-anchored, with a Svelte studio.",
+	"license": "MIT",
+	"type": "module",
+	"author": "Tibbe",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/idunworks/crayon-o-matic.git"
+	},
+	"homepage": "https://github.com/idunworks/crayon-o-matic#readme",
+	"bugs": "https://github.com/idunworks/crayon-o-matic/issues",
+	"keywords": [
+		"drawing",
+		"children",
+		"crayon",
+		"svg",
+		"generative",
+		"t-shirt",
+		"svelte"
+	],
+	"sideEffects": false,
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/core/index.d.ts",
+			"default": "./dist/core/index.js"
+		},
+		"./interpret": {
+			"types": "./dist/interpret/index.d.ts",
+			"default": "./dist/interpret/index.js"
+		},
+		"./interpret/server": {
+			"types": "./dist/interpret/server.d.ts",
+			"default": "./dist/interpret/server.js"
+		},
+		"./studio": {
+			"types": "./dist/studio/index.d.ts",
+			"svelte": "./dist/studio/index.js",
+			"default": "./dist/studio/index.js"
+		}
+	},
+	"scripts": {
+		"build": "node scripts/build.mjs",
+		"smoke": "node scripts/smoke.mjs"
+	},
+	"dependencies": {
+		"zod": "^4.1.0"
+	},
+	"peerDependencies": {
+		"@anthropic-ai/sdk": ">=1.0.0",
+		"svelte": "^5.0.0"
+	},
+	"peerDependenciesMeta": {
+		"@anthropic-ai/sdk": {
+			"optional": true
+		},
+		"svelte": {
+			"optional": true
+		}
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"devDependencies": {
+		"@anthropic-ai/sdk": "^1.10.0",
+		"@crayon-o-matic/core": "workspace:^",
+		"@crayon-o-matic/interpret": "workspace:^",
+		"@crayon-o-matic/studio": "workspace:^",
+		"@sveltejs/package": "^3.0.3",
+		"svelte": "^5.58.0",
+		"tsup": "^9.0.0",
+		"typescript": "^5.9.3"
+	}
+}
