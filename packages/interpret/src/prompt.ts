@@ -6,6 +6,7 @@
  * the Zod schema, whatever model answered.
  */
 import { EXPRESSIONS, POSES, PRIMITIVES, RELATIONS, THING_KINDS } from '@crayon-o-matic/core';
+import { TEMPLATES } from './templates.js';
 
 /** Longest motif sent to any model. Longer input is cut, never rejected. */
 export const MAX_MOTIF = 200;
@@ -33,6 +34,7 @@ export const SYSTEM_PROMPT = [
 	'- kidSays is one short line in a 4-year-old\'s voice, about the picture.',
 	'- extras are things a child adds on their own, like sun, heart, cloud, flower.',
 	'- ids are lowercase words with dashes.',
+	`- When one fits, use one of these labels; they are drawn best: ${[...new Set(TEMPLATES.map((t) => t.label))].join(', ')}.`,
 	`Example for "a furious grandma with a cat": ${JSON.stringify(EXAMPLE)}`
 ].join('\n');
 

@@ -8,3 +8,5 @@ export { draw, resolveDials, type Drawing } from './draw.js';
 export { normalisePalette } from './colour.js';
 export { rngFor, makeRng, hashString } from './rng.js';
 export { drawFreehand, cleanSketch, MAX_SKETCH_STROKES, type Sketch, type SketchStroke } from './freehand.js';
+export { FORMS, formFor } from './forms/library.js';
+export { PIECE_SHAPES, PRIMITIVE_OF, type Form, type FormPiece, type PieceShape } from './forms/pieces.js';

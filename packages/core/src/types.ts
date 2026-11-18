@@ -88,6 +88,8 @@ export interface Thing {
 	knownInside?: string[];
 	colourIdea?: string;
 	pose?: Pose;
+	/** A base form from the library (forms/library.ts) to draw it from, e.g. "balloon". */
+	form?: string;
 	relation?: { to: string; how: RelationKind };
 }
 

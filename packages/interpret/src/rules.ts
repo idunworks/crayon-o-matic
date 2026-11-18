@@ -6,7 +6,7 @@
  */
 import type { ConceptScene, Expression, Part, Thing } from '@crayon-o-matic/core';
 import { moodOf } from './offline.js';
-import { templateFor, type Template } from './templates.js';
+import { templateFor, withMoodFace, type Template } from './templates.js';
 
 /** Most parts a thing keeps after merging the template's with the model's own. */
 const MAX_PARTS = 20;
@@ -32,7 +32,7 @@ function ruled(thing: Thing): Thing {
 	if (!template) return thing;
 	const { pose, ...rest } = thing;
 	const keepPose = pose && template.poses?.includes(pose);
-	return { ...rest, kind: template.kind, parts: mergedParts(template, thing.parts), ...(keepPose ? { pose } : {}) };
+	return { ...rest, kind: template.kind, parts: mergedParts(template, thing.parts), ...(keepPose ? { pose } : {}), ...(template.form ? { form: template.form } : {}) };
 }
 
 /** Apply the rules to a model's scene: known things, the motif's mood, the person's override. */
@@ -42,7 +42,8 @@ export function withRules(scene: ConceptScene, motif: string, expression?: Expre
 		...scene,
 		things: scene.things.map((t, i) => {
 			const thing = ruled(t);
-			return i === 0 && mood ? { ...thing, expression: mood } : thing;
+			if (i !== 0 || !mood) return thing;
+			return { ...thing, expression: mood, parts: withMoodFace(thing.parts, templateOf(thing.label)) };
 		})
 	};
 }

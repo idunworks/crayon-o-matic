@@ -27,6 +27,7 @@ export const ThingSchema = z.object({
 	knownInside: z.array(z.string().max(40)).max(5).optional(),
 	colourIdea: z.string().max(20).optional(),
 	pose: z.enum(POSES).optional(),
+	form: z.string().max(40).optional(),
 	relation: z.object({ to: z.string().max(40), how: z.enum(RELATIONS) }).optional()
 });
 

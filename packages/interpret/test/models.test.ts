@@ -154,3 +154,14 @@ describe('rules over the model', () => {
 		expect(out.things[0]!.pose).toBeUndefined();
 	});
 });
+
+describe('mood faces on forms', () => {
+	it('a grumpy robot keeps its face even when the model lists eyes and mouth last', async () => {
+		const reply = JSON.stringify({ title: 't', kidSays: 'k', extras: [], things: [{ id: 'robot', label: 'robot', kind: 'person', importance: 1, expression: 'sad', parts: [{ name: 'head', primitive: 'box' }, { name: 'eyes', primitive: 'dots' }, { name: 'mouth', primitive: 'U' }] }] });
+		const out = await claudeInterpreter({ client: fakeClaude(message(reply)).client }).interpret('a grumpy robot');
+		const names = out.things[0]!.parts.map((p) => p.name);
+		expect(out.things[0]!.form).toBe('robot');
+		expect(names[1]).toBe('face');
+		expect(names.filter((n) => /eyes|mouth/.test(n))).toEqual([]);
+	});
+});

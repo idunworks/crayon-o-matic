@@ -131,7 +131,7 @@ export function plan(scene: ConceptScene, caps: Capabilities, dials: Dials, page
 			expression: sel.thing.expression,
 			mixedView: animal && kidRng.chance(caps.mixedViewChance),
 			...(sel.thing.pose ? { pose: sel.thing.pose } : {})
-		});
+		}, sel.thing.form);
 		const where = place(sel, built.strokes, page, caps, baseline, placed.map((p) => p.box), selected.filter((s) => !s.extra).length > 1, rngFor(seed, `place/${sel.thing.id}`));
 		if (!where) continue;
 		const colour = colouring ? colours.pick(sel.thing) : line;

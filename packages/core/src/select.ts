@@ -3,6 +3,8 @@
  * them, so the budget cuts from the tail. The main thing always keeps its first two
  * parts (head and eyes for a person); a young, bored child may skip the rest of the scene.
  */
+import { formFor } from './forms/library.js';
+import { PRIMITIVE_OF } from './forms/pieces.js';
 import type { Rng } from './rng.js';
 import type { Capabilities, ConceptScene, Part, Thing } from './types.js';
 
@@ -31,6 +33,9 @@ function allowed(thing: Thing, caps: Capabilities): Part[] {
 	return [...thing.parts];
 }
 
+/** Pieces an extra drawn from a base form keeps (tuned: extras stay simple). */
+const EXTRA_FORM_PIECES = 2;
+
 /** Small things a child adds on their own (spec §4.1 extras, chaos dial). */
 export function extraThing(name: string, index: number): Thing {
 	const id = `extra-${index}-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
@@ -44,8 +49,12 @@ export function extraThing(name: string, index: number): Thing {
 			return { ...base, kind: 'flower', expression: 'none', parts: [{ name: 'middle', primitive: 'loop' }, { name: 'petals', primitive: 'loop' }, { name: 'stem', primitive: 'line' }] };
 		case 'bird':
 			return { ...base, kind: 'blob', expression: 'none', parts: [{ name: 'bird', primitive: 'arc' }] };
-		default:
-			return { ...base, kind: 'blob', expression: 'none', parts: [{ name: name.toLowerCase(), primitive: name.toLowerCase() === 'heart' ? 'heart' : 'loop' }] };
+		default: {
+			// a little star, moon or balloon: its base form, first pieces only (it's an extra)
+			const form = formFor(name);
+			if (form) return { ...base, kind: 'object', expression: 'none', form: form.name, parts: form.pieces.slice(0, EXTRA_FORM_PIECES).map((p) => ({ name: p.name, primitive: PRIMITIVE_OF[p.shape] })) };
+			return { ...base, kind: 'blob', expression: 'none', parts: [{ name: name.toLowerCase(), primitive: 'loop' }] };
+		}
 	}
 }
 

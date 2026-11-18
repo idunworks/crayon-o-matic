@@ -259,3 +259,33 @@ export function cloudLoop(cx: number, cy: number, rx: number, ry: number, bumps:
 	}
 	return out;
 }
+
+/** A star with `points` tips, drawn in one go from the top tip. */
+export function star(cx: number, cy: number, r: number, points = 5, inner = 0.45): Point[] {
+	const out: Point[] = [];
+	for (let i = 0; i < points * 2; i++) {
+		const a = -Math.PI / 2 + (i / (points * 2)) * Math.PI * 2;
+		const rr = i % 2 === 0 ? r : r * inner;
+		out.push(pt(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr));
+	}
+	return out;
+}
+
+/** A wavy line from a to b: water, hair, spaghetti. */
+export function wave(a: Point, b: Point, cycles: number, amp: number, n = 24): Point[] {
+	const len = dist(a, b) || 1;
+	const nx = -(b.y - a.y) / len;
+	const ny = (b.x - a.x) / len;
+	return Array.from({ length: n + 1 }, (_, i) => {
+		const t = i / n;
+		const s = Math.sin(t * cycles * Math.PI * 2) * amp;
+		return pt(a.x + (b.x - a.x) * t + nx * s, a.y + (b.y - a.y) * t + ny * s);
+	});
+}
+
+/** A crescent moon opening to the right, as one closed outline. */
+export function crescent(cx: number, cy: number, r: number, n = 14): Point[] {
+	const outer = arc(cx, cy, r, r, Math.PI * 0.5, Math.PI * 1.5, n);
+	const inner = arc(cx + r * 0.45, cy, r * 0.75, r * 0.85, Math.PI * 1.45, Math.PI * 0.55, n);
+	return [...outer, ...inner];
+}

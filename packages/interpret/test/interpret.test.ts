@@ -73,3 +73,19 @@ describe('no text in the picture', () => {
 		expect(() => parseScene({ title: 'x', kidSays: 'y', extras: [], things: [{ id: 'Bad Id!', label: 'a', kind: 'blob', importance: 1, expression: 'happy', parts: [{ name: 'b', primitive: 'loop' }] }] })).toThrow();
 	});
 });
+
+describe('base forms as motifs', () => {
+	it('a form word gets its form, with no face unless a mood is asked for', () => {
+		const plain = interpretOffline('a balloon').things[0]!;
+		expect(plain.form).toBe('balloon');
+		expect(plain.parts.some((p) => p.name === 'face')).toBe(false);
+		const sad = interpretOffline('a sad balloon').things[0]!;
+		expect(sad.parts[1]!.name).toBe('face');
+		expect(sad.expression).toBe('sad');
+	});
+
+	it('words like taxes and beach land on a form, not a blob', () => {
+		expect(interpretOffline('a llama doing taxes').things.some((t) => t.form === 'book')).toBe(true);
+		expect(interpretOffline('mum at the beach').things.some((t) => t.form === 'sea')).toBe(true);
+	});
+});

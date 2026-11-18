@@ -1,6 +1,8 @@
 import type { Part, ThingKind } from '../types.js';
 import { animal2, animal4, bug, fish } from './animals.js';
 import type { BuildCtx, Built } from './common.js';
+import { formFor } from '../forms/library.js';
+import { formBuilder } from './form.js';
 import { person } from './person.js';
 import { blob, cloud, flower, house, sun, tree, vehicle } from './things.js';
 
@@ -25,6 +27,8 @@ const BUILDERS: Record<ThingKind, Builder> = {
 	blob
 };
 
-export function build(kind: ThingKind, parts: readonly Part[], ctx: BuildCtx): Built {
-	return BUILDERS[kind](parts, ctx);
+/** A thing with a known base form is drawn from it; otherwise by its kind's builder. */
+export function build(kind: ThingKind, parts: readonly Part[], ctx: BuildCtx, form?: string): Built {
+	const known = formFor(form);
+	return known ? formBuilder(known, parts, ctx) : BUILDERS[kind](parts, ctx);
 }

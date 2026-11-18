@@ -4,7 +4,7 @@
  */
 import { hashString, makeRng, type ConceptScene, type Expression, type Part, type Pose, type Thing } from '@crayon-o-matic/core';
 import { parseScene } from './schema.js';
-import { TEMPLATES, templateFor, type Template } from './templates.js';
+import { TEMPLATES, templateFor, withMoodFace, type Template } from './templates.js';
 
 const MAX_MOTIF = 200;
 const MAX_THINGS = 3;
@@ -93,7 +93,8 @@ export function interpretOffline(motif: string, opts: OfflineOptions = {}): Conc
 		found.push(unknownThing(noun));
 	}
 
-	const mood = opts.expression ?? moodOf(text) ?? 'happy';
+	const asked = opts.expression ?? moodOf(text);
+	const mood = asked ?? 'happy';
 	const used = new Set<string>();
 	const things: Thing[] = found.map((t, i) => {
 		const pose = poseFor(text, t, rng);
@@ -103,9 +104,10 @@ export function interpretOffline(motif: string, opts: OfflineOptions = {}): Conc
 			kind: t.kind,
 			importance: IMPORTANCE[i] ?? 0.3,
 			expression: i === 0 ? mood : rng.pick<Expression>(['happy', 'meh', 'none']),
-			parts: t.parts.map((p) => ({ ...p })),
+			parts: i === 0 && asked ? withMoodFace(t.parts, t) : t.parts.map((p) => ({ ...p })),
 			...(t.colourIdea ? { colourIdea: t.colourIdea } : {}),
-			...(pose ? { pose } : {})
+			...(pose ? { pose } : {}),
+			...(t.form ? { form: t.form } : {})
 		};
 		return thing;
 	});

@@ -31,7 +31,8 @@ motif ─[1 interpret]→ ConceptScene ─[2 age model]→ Capabilities ─[3 pl
 ```
 
 1. **Interpret** (`packages/interpret`): what's in the picture, as a child understands it. The
-   built-in templates know 23 motifs; a model reads anything else (see below).
+   built-in templates know 53 things (people, animals, and the base forms below); a model
+   reads anything else (see below).
 2. **Age model** (`packages/core/src/capabilities.ts`): which shapes the child can make, how many
    parts, how big the head is, how shaky. All numbers live in `anchors.ts`, each with its source.
 3. **Plan**: which parts survive, as which shapes (a 3-year-old's square is a loop), where they go
@@ -41,6 +42,27 @@ motif ─[1 interpret]→ ConceptScene ─[2 age model]→ Capabilities ─[3 pl
 
 Everything after step 1 is pure and seeded, so moving a dial redraws instantly and tests need no
 network.
+
+## Base forms: add a thing without code
+
+Most things a child draws are a few simple pieces: a balloon is a loop, a knot and a wavy
+string. Those live as data in [`packages/core/src/forms/library.ts`](packages/core/src/forms/library.ts):
+
+```ts
+{ name: 'balloon', words: ['balloons'], face: { at: [50, 32], r: 18 }, pieces: [
+  { name: 'balloon', shape: 'loop', at: [50, 32], size: [44, 52] },
+  { name: 'string', shape: 'wave', at: [50, 58], to: [46, 98], size: [0, 3], count: 1.5 },
+  { name: 'knot', shape: 'triangle', at: [50, 60], size: [6, 5], dir: -90 }
+] },
+```
+
+- Coordinates are a 100 × 100 box, y down. Pieces are listed in the order a child draws them;
+  the age and attention dials keep them from the top.
+- The age model still decides how each shape comes out: a 3-year-old's box is a loop, a star is
+  an asterisk until about 5.
+- `face` is where a face goes, only when the motif asks for a mood ("a sad banana").
+- Shapes: loop, box, triangle, line, wave, zigzag, arc, U, dots, rays, spiral, scribble, heart,
+  star, crescent, cross, tab. Every entry is checked by the tests and drawn at every age.
 
 ## Who reads the motif
 
