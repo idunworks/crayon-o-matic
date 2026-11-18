@@ -494,6 +494,14 @@ Carried over from STYLE-RULES §14 and scaled by `expressionSkill`:
 ---
 
 ## 10. Open questions (for Tibbe, when the session reaches them)
+
+**Answered 2026-11-18:**
+- **Name:** Crayon-o-matic for the app and repo; "kid-ify" is the verb for the freehand degree slider.
+- **Where:** a separate public repo, `github.com/idunworks/crayon-o-matic`, MIT.
+- **Demo key:** the owner pays, so the hosted demo is rigorously limited: one try per visitor, told up front, plus hard global caps. Bring-your-own-key for everything else (CLI, self-hosting).
+- **Later:** grow the offline ruleset with more base forms, and maybe a tiny private model, if it holds up on cost and speed (see the phase 2 notes).
+
+The original questions:
 1. The **name**: Crayon-o-matic, or something outside the Bold Statement family, since it's open source?
 2. **Age range:** only 3–5, or let the slider go 2–7 (2 = pure scribble, 7 = baseline and sky)?
 3. **Hosted demo:** whose API key pays for it? Rate limits, or bring-your-own-key only?
