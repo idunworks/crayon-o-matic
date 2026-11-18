@@ -15,7 +15,10 @@ export type StudioInterpret = (motif: string) => Promise<StudioReading>;
 
 /** The finished drawing, handed to the host on done or close. */
 export interface StudioResult {
+	/** The whole paper. */
 	svg: string;
+	/** Cropped to the drawing (lines, shadow, highlight, a small margin): for printing. */
+	printSvg: string;
 	mode: 'motif' | 'freehand';
 	motif?: string;
 	/** The kid's line about the picture (UI only, never in the image). */

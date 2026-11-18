@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { DEFAULT_PAGE, draw, drawFreehand, type ConceptScene, type Dials, type Point } from '@crayon-o-matic/core';
+	import { contentBox, cropSvg, DEFAULT_PAGE, draw, drawFreehand, type ConceptScene, type Dials, type Point } from '@crayon-o-matic/core';
 	import { interpretOffline } from '@crayon-o-matic/interpret';
 	import Dial from './Dial.svelte';
 	import Paper from './Paper.svelte';
@@ -96,7 +96,8 @@
 
 	function result(): StudioResult | null {
 		if (!drawing || empty) return null;
-		return { svg: drawing.svg, mode, dials: drawing.dials, ...(mode === 'motif' ? { motif: drawnMotif, kidSays: scene.kidSays } : {}) };
+		const printSvg = cropSvg(drawing.svg, contentBox(drawing.strokes, drawing.dials));
+		return { svg: drawing.svg, printSvg, mode, dials: drawing.dials, ...(mode === 'motif' ? { motif: drawnMotif, kidSays: scene.kidSays } : {}) };
 	}
 
 	async function read(e: SubmitEvent) {

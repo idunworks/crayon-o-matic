@@ -122,6 +122,8 @@ hand, pick the age, colours and light, get the SVG.
   load, so a limited model isn't spent by just visiting. Without it, the built-in words are used.
   Return `note` to tell the person something (a limit, a fallback).
 - `onclose` adds a ✕ (and Esc) and hands back the drawing so far, so closing can keep the work.
+- The result has `svg` (the whole paper) and `printSvg` (cropped to the drawing, its shadow and
+  highlight): put `printSvg` on a tee. `contentBox` and `cropSvg` in core do the same anywhere.
 - Theme it with CSS custom properties: `--cs-bg`, `--cs-ink`, `--cs-paper`, `--cs-accent`,
   `--cs-accent-ink`, `--cs-font`, `--cs-title-font`, `--cs-radius`, `--cs-focus`.
 - The packages ship TypeScript source; in SvelteKit add `ssr: { noExternal: [/^@crayon-o-matic\//] }`

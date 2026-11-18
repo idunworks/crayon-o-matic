@@ -10,3 +10,4 @@ export { rngFor, makeRng, hashString } from './rng.js';
 export { drawFreehand, cleanSketch, MAX_SKETCH_STROKES, type Sketch, type SketchStroke } from './freehand.js';
 export { FORMS, formFor } from './forms/library.js';
 export { PIECE_SHAPES, PRIMITIVE_OF, type Form, type FormPiece, type PieceShape } from './forms/pieces.js';
+export { contentBox, cropSvg, type Box as ContentBox } from './medium/crop.js';
