@@ -1,0 +1,11 @@
+{
+	"name": "@crayon-o-matic/preview",
+	"private": true,
+	"version": "0.1.0",
+	"license": "MIT",
+	"type": "module",
+	"description": "Dev page with sliders for tuning the dials by eye. Not the phase 3 web app.",
+	"scripts": { "dev": "vite --port 5391 --strictPort" },
+	"dependencies": { "@crayon-o-matic/core": "workspace:*", "@crayon-o-matic/interpret": "workspace:*" },
+	"devDependencies": { "vite": "^6.4.1" }
+}

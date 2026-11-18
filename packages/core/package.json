@@ -1,0 +1,9 @@
+{
+	"name": "@crayon-o-matic/core",
+	"version": "0.1.0",
+	"description": "Age model, planner, hand and medium: draws a scene the way a 3-6 year old would. Pure and seeded, no runtime dependencies.",
+	"license": "MIT",
+	"type": "module",
+	"main": "./src/index.ts",
+	"exports": { ".": "./src/index.ts" }
+}

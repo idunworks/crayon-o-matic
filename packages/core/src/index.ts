@@ -1,0 +1,10 @@
+export * from './types.js';
+export { ANCHORS, SHAPE_MILESTONES, FIGURE_TYPE, MILESTONE_SLACK, AGE_MIN, AGE_MAX, lookup, type Anchor, type AnchorStatus } from './anchors.js';
+export { capabilities } from './capabilities.js';
+export { plan, DEFAULT_PAGE } from './plan.js';
+export { hand } from './hand.js';
+export { crayonSvg } from './medium/crayon.js';
+export { draw, resolveDials, type Drawing } from './draw.js';
+export { normalisePalette } from './colour.js';
+export { rngFor, makeRng, hashString } from './rng.js';
+export { drawFreehand, cleanSketch, MAX_SKETCH_STROKES, type Sketch, type SketchStroke } from './freehand.js';

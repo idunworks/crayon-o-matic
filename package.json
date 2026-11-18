@@ -1,0 +1,19 @@
+{
+	"name": "crayon-o-matic",
+	"private": true,
+	"license": "MIT",
+	"packageManager": "pnpm@9.15.9",
+	"type": "module",
+	"scripts": {
+		"test": "vitest run",
+		"check": "tsc -b",
+		"crayon": "tsx apps/cli/src/main.ts",
+		"preview": "pnpm --filter @crayon-o-matic/preview dev"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.0",
+		"tsx": "^4.19.0",
+		"typescript": "^5.9.3",
+		"vitest": "^4.1.12"
+	}
+}

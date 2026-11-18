@@ -1,0 +1,12 @@
+{
+	"name": "@crayon-o-matic/cli",
+	"version": "0.1.0",
+	"license": "MIT",
+	"type": "module",
+	"bin": { "crayon": "./src/main.ts" },
+	"dependencies": {
+		"@crayon-o-matic/core": "workspace:*",
+		"@crayon-o-matic/interpret": "workspace:*",
+		"@resvg/resvg-js": "^2.6.2"
+	}
+}
