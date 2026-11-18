@@ -1,9 +1,6 @@
 # Crayon-o-matic
 
-Type a motif ("a furious grandma with a cat"), pick an age from 3 to 6, and get the drawing a
-child of that age would make. It is believable because it's built on what developmental research
-says children actually draw (see [SCIENCE.md](SCIENCE.md)), and adorable because the dials let you
-push it.
+Type a motif ("a furious grandma with a cat"), pick an age from 3 to 6, and get the drawing a child of that age would make. It is believable because it's built on what developmental research says children actually draw (see [SCIENCE.md](SCIENCE.md)), and adorable because the dials let you push it. However, art doesn't get better than the artist so you can swap out everything to suit your own style.
 
 **Status: phase 3 of 6** (core engine, base forms, CLI, pluggable interpreters, and the web
 studio, also embeddable as a Svelte component). The spec is in
