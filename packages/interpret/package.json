@@ -1,10 +1,16 @@
 {
 	"name": "@crayon-o-matic/interpret",
 	"version": "0.1.0",
-	"description": "Motif text to ConceptScene: offline templates now, the Claude API step in phase 2.",
+	"description": "Motif text to ConceptScene: offline templates, your own Claude key, or your own local model.",
 	"license": "MIT",
 	"type": "module",
 	"main": "./src/index.ts",
-	"exports": { ".": "./src/index.ts" },
-	"dependencies": { "@crayon-o-matic/core": "workspace:*", "zod": "^4.1.0" }
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"dependencies": {
+		"@anthropic-ai/sdk": "^1.10.0",
+		"@crayon-o-matic/core": "workspace:*",
+		"zod": "^4.1.0"
+	}
 }

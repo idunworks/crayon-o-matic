@@ -53,7 +53,7 @@ const KID_SAYS: Record<Expression, readonly string[]> = {
 	none: ['this is {main}', 'I drawed {main}']
 };
 
-function moodOf(text: string): Expression | undefined {
+export function moodOf(text: string): Expression | undefined {
 	for (const [re, mood] of MOODS) if (re.test(text)) return mood;
 	return undefined;
 }

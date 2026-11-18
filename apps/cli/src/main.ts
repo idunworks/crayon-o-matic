@@ -6,7 +6,7 @@
 import { writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { DEFAULT_PAGE, EXPRESSIONS, draw, type ColourMode, type Dials, type Expression, type Handedness, type Pressure } from '@crayon-o-matic/core';
-import { interpretOffline } from '@crayon-o-matic/interpret';
+import { claudeInterpreter, DEFAULT_CLAUDE_MODEL, DEFAULT_LOCAL_URL, interpretWithFallback, localInterpreter, offlineInterpreter, type Interpreter } from '@crayon-o-matic/interpret';
 import { svgToPng, svgToPngWidth } from './png.js';
 import { renderScience } from './science.js';
 import { reviewSheet } from './sheet.js';
@@ -37,11 +37,31 @@ options:
   --highlight-angle, --highlight-length, --highlight-cut
                          the same for the highlight (3rd colour; defaults 230, 4, 0.6)
   --expression <${EXPRESSIONS.join('|')}>
+  --interpreter <offline|claude|local>
+                         who reads the motif (default offline: the built-in templates)
+                         claude: your key in ANTHROPIC_API_KEY; model in CRAYON_CLAUDE_MODEL
+                                 (default ${DEFAULT_CLAUDE_MODEL})
+                         local:  an OpenAI-compatible server (Ollama, llama.cpp, vLLM ...)
+                                 CRAYON_LOCAL_URL (default ${DEFAULT_LOCAL_URL}),
+                                 CRAYON_LOCAL_MODEL (required), CRAYON_LOCAL_KEY (optional)
+                         if the model fails, the built-in templates draw instead
   --out <file>           .svg or .png (default: drawing.svg)
   --png                  write a PNG at print size (30 × 40 cm) instead of SVG
   --dpi <n>              PNG resolution, default 300
   --json                 print the interpreted scene, don't draw
   --science              regenerate SCIENCE.md from the anchors file`;
+
+const INTERPRETERS = ['offline', 'claude', 'local'] as const;
+
+function interpreterFor(kind: (typeof INTERPRETERS)[number] | undefined): Interpreter {
+	const env = process.env;
+	if (kind === 'claude') return claudeInterpreter(env.CRAYON_CLAUDE_MODEL ? { model: env.CRAYON_CLAUDE_MODEL } : {});
+	if (kind === 'local') {
+		if (!env.CRAYON_LOCAL_MODEL) fail('--interpreter local needs CRAYON_LOCAL_MODEL, e.g. qwen2.5:3b');
+		return localInterpreter({ model: env.CRAYON_LOCAL_MODEL, ...(env.CRAYON_LOCAL_URL ? { baseUrl: env.CRAYON_LOCAL_URL } : {}), ...(env.CRAYON_LOCAL_KEY ? { apiKey: env.CRAYON_LOCAL_KEY } : {}) });
+	}
+	return offlineInterpreter;
+}
 
 const PRESSURES: readonly Pressure[] = ['light', 'normal', 'hard'];
 const HANDS: readonly Handedness[] = ['right', 'left'];
@@ -67,7 +87,7 @@ function oneOf<T extends string>(v: string | undefined, name: string, allowed: r
 	return v as T;
 }
 
-function main(): void {
+async function main(): Promise<void> {
 	const { values, positionals } = parseArgs({
 		allowPositionals: true,
 		options: {
@@ -75,7 +95,7 @@ function main(): void {
 			hand: { type: 'string' }, attention: { type: 'string' }, chaos: { type: 'string' }, adorable: { type: 'string' },
 			'colour-mode': { type: 'string' }, palette: { type: 'string' }, 'line-only': { type: 'boolean' }, 'colour-in': { type: 'boolean' }, 'shadow-angle': { type: 'string' }, 'shadow-length': { type: 'string' }, 'shadow-cut': { type: 'string' }, 'highlight-angle': { type: 'string' }, 'highlight-length': { type: 'string' }, 'highlight-cut': { type: 'string' },
 			expression: { type: 'string' }, out: { type: 'string' }, png: { type: 'boolean' }, dpi: { type: 'string' },
-			json: { type: 'boolean' }, sheet: { type: 'boolean' }, science: { type: 'boolean' }, help: { type: 'boolean', short: 'h' }
+			json: { type: 'boolean' }, interpreter: { type: 'string' }, sheet: { type: 'boolean' }, science: { type: 'boolean' }, help: { type: 'boolean', short: 'h' }
 		}
 	});
 	if (values.help) return void process.stdout.write(`${HELP}\n`);
@@ -123,7 +143,9 @@ function main(): void {
 	const motif = positionals.join(' ').trim();
 	if (!motif) fail('give a motif, e.g. crayon "a furious grandma with a cat"');
 	const expression = oneOf(values.expression, 'expression', EXPRESSIONS as readonly Expression[]);
-	const scene = interpretOffline(motif, expression ? { expression } : {});
+	const interpreter = interpreterFor(oneOf(values.interpreter, 'interpreter', INTERPRETERS));
+	const { scene, source, fallbackReason } = await interpretWithFallback(interpreter, motif, expression ? { expression } : {});
+	if (fallbackReason) process.stderr.write(`crayon: ${fallbackReason}; drew from the built-in templates instead\n`);
 	if (values.json) return void process.stdout.write(`${JSON.stringify(scene, null, 2)}\n`);
 
 	const drawing = draw(scene, dials);
@@ -131,7 +153,10 @@ function main(): void {
 	const out = values.out ?? (png ? 'drawing.png' : 'drawing.svg');
 	writeFileSync(out, png ? svgToPng(drawing.svg, DEFAULT_PAGE.w, dpi) : drawing.svg);
 	// the kid's line is for the UI only; it never goes into the image
-	process.stdout.write(`wrote ${out}\n${scene.title}: “${scene.kidSays}”\n`);
+	process.stdout.write(`wrote ${out} (read by ${source})\n${scene.title}: “${scene.kidSays}”\n`);
 }
 
-main();
+main().catch((err: unknown) => {
+	process.stderr.write(`crayon: ${err instanceof Error ? err.message : String(err)}\n`);
+	process.exit(1);
+});
