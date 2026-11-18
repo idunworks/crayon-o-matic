@@ -8,7 +8,8 @@
 		"test": "vitest run",
 		"check": "tsc -b",
 		"crayon": "tsx apps/cli/src/main.ts",
-		"preview": "pnpm --filter @crayon-o-matic/preview dev"
+		"preview": "pnpm --filter @crayon-o-matic/preview dev",
+		"web": "pnpm --filter @crayon-o-matic/web dev"
 	},
 	"devDependencies": {
 		"@types/node": "^22.10.0",

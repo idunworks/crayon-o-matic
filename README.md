@@ -5,8 +5,8 @@ child of that age would make. It is believable because it's built on what develo
 says children actually draw (see [SCIENCE.md](SCIENCE.md)), and adorable because the dials let you
 push it.
 
-**Status: phase 2 of 6** (core engine, offline motifs, CLI, and pluggable interpreters: your own
-Claude key or your own local model). The spec is in
+**Status: phase 3 of 6** (core engine, base forms, CLI, pluggable interpreters, and the web
+studio, also embeddable as a Svelte component). The spec is in
 [docs/spec/SPEC.md](docs/spec/SPEC.md).
 
 ## Try it
@@ -18,7 +18,8 @@ pnpm crayon "a scared dog" --age 5 --palette "#232323,#d7263d" --png --out dog.p
 pnpm crayon --sheet --out review.png                 # 4 motifs × ages 3/4/5/6 × 2 seeds
 pnpm crayon --sheet "cat; a house with a sun"        # a sheet of your own motifs
 pnpm crayon --help
-pnpm preview                                         # sliders for every dial: http://localhost:5391/
+pnpm web                                             # the studio: http://localhost:5392/
+pnpm preview                                         # dev sliders for every dial: http://localhost:5391/
 ```
 
 Same motif + same dials + same seed = the same SVG, byte for byte. Change only `--age` and the
@@ -93,7 +94,7 @@ CRAYON_LOCAL_MODEL=qwen3:4b-instruct pnpm crayon "a llama doing taxes" --interpr
 In code:
 
 ```ts
-import { claudeInterpreter, interpretWithFallback, localInterpreter } from '@crayon-o-matic/interpret';
+import { claudeInterpreter, interpretWithFallback, localInterpreter } from '@crayon-o-matic/interpret/server';
 import { draw } from '@crayon-o-matic/core';
 
 const { scene, source } = await interpretWithFallback(localInterpreter({ model: 'qwen3:4b-instruct' }), 'a llama doing taxes');
@@ -102,6 +103,33 @@ const { svg } = draw(scene, { age: 4, seed: 7 });
 
 Any object with `name` and `interpret(motif)` returning a ConceptScene works as an interpreter,
 so other providers plug in the same way.
+
+## The studio, in your own app
+
+`@crayon-o-matic/studio` is the whole studio as one Svelte 5 component: type a motif or draw by
+hand, pick the age, colours and light, get the SVG.
+
+```svelte
+<script lang="ts">
+  import { Studio, type StudioResult } from '@crayon-o-matic/studio';
+  const putOnTee = (r: StudioResult) => { /* r.svg, r.kidSays, r.dials */ };
+</script>
+
+<Studio interpret={myServerReader} ondone={putOnTee} onclose={putOnTee} doneLabel="Put it on a tee" />
+```
+
+- `interpret` is yours: the studio only calls it when the person presses "Draw it!", never on
+  load, so a limited model isn't spent by just visiting. Without it, the built-in words are used.
+  Return `note` to tell the person something (a limit, a fallback).
+- `onclose` adds a ✕ (and Esc) and hands back the drawing so far, so closing can keep the work.
+- Theme it with CSS custom properties: `--cs-bg`, `--cs-ink`, `--cs-paper`, `--cs-accent`,
+  `--cs-accent-ink`, `--cs-font`, `--cs-title-font`, `--cs-radius`, `--cs-focus`.
+- The packages ship TypeScript source; in SvelteKit add `ssr: { noExternal: [/^@crayon-o-matic\//] }`
+  to your Vite config.
+
+`apps/web` is the stand-alone site built on it, with one optional server route: set
+`CRAYON_INTERPRETER=claude` (and `ANTHROPIC_API_KEY`) or `local` to read any motif, limited to
+`CRAYON_TRIES_PER_HOUR` per visitor (default 20).
 
 ## Colour: 1 to 3, on purpose
 

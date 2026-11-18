@@ -6,7 +6,7 @@
 import { writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { DEFAULT_PAGE, EXPRESSIONS, draw, type ColourMode, type Dials, type Expression, type Handedness, type Pressure } from '@crayon-o-matic/core';
-import { claudeInterpreter, DEFAULT_CLAUDE_MODEL, DEFAULT_LOCAL_URL, interpretWithFallback, localInterpreter, offlineInterpreter, type Interpreter } from '@crayon-o-matic/interpret';
+import { claudeInterpreter, DEFAULT_CLAUDE_MODEL, DEFAULT_LOCAL_URL, interpretWithFallback, localInterpreter, offlineInterpreter, type Interpreter } from '@crayon-o-matic/interpret/server';
 import { svgToPng, svgToPngWidth } from './png.js';
 import { renderScience } from './science.js';
 import { reviewSheet } from './sheet.js';

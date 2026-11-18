@@ -1,0 +1,24 @@
+{
+	"name": "@crayon-o-matic/studio",
+	"version": "0.1.0",
+	"description": "The Crayon-o-matic drawing studio as a Svelte 5 component: type a motif or draw by hand, tune the child, get an SVG.",
+	"license": "MIT",
+	"type": "module",
+	"svelte": "./src/index.ts",
+	"exports": {
+		".": {
+			"svelte": "./src/index.ts",
+			"default": "./src/index.ts"
+		}
+	},
+	"dependencies": {
+		"@crayon-o-matic/core": "workspace:*",
+		"@crayon-o-matic/interpret": "workspace:*"
+	},
+	"peerDependencies": {
+		"svelte": "^5.0.0"
+	},
+	"devDependencies": {
+		"svelte": "^5.58.0"
+	}
+}

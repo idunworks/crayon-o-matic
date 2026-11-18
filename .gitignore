@@ -3,3 +3,5 @@ dist/
 *.tsbuildinfo
 out/
 .DS_Store
+.svelte-kit/
+build/
