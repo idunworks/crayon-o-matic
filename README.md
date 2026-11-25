@@ -11,7 +11,7 @@ studio, also embeddable as a Svelte component). The spec is in
 As a package ([npm](https://www.npmjs.com/package/crayon-o-matic)): `npm i crayon-o-matic`, then
 `import { draw } from 'crayon-o-matic'`; see [the package README](packages/crayon-o-matic/README.md).
 
-From this repo:
+From this repo (needs Node 20 or later, tested on 22, and pnpm 9: run `corepack enable` once):
 
 ```bash
 pnpm install
