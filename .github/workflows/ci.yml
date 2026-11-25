@@ -19,3 +19,4 @@ jobs:
       - run: pnpm test
       - run: pnpm --filter crayon-o-matic build
       - run: pnpm --filter crayon-o-matic smoke
+      - run: pnpm --filter @crayon-o-matic/web build

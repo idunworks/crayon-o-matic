@@ -48,6 +48,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@anthropic-ai/sdk':
+        specifier: ^1.10.0
+        version: 1.10.0(zod@4.6.7)
       '@crayon-o-matic/core':
         specifier: workspace:*
         version: link:../../packages/core
